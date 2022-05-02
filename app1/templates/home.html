@@ -1,0 +1,204 @@
+
+<html>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <title>Home Page</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'mystyle.css' %}">
+</head>
+<body>
+
+
+  <div class="heading">Software Architecture Project : Sentiment Analysis On Restaurant Reviews</div>
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+  <div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+   
+  <div class = "abouttext">
+    <pre><b>  Project Members</b><br><br></pre>
+    <pre>  Neha Thipse       (2021sp93056)</pre> 
+    <pre>  Anagha D Ananth   (2021sp93053)</pre>
+    <pre>  Natasha Sheelvant (2021sp93033)</pre>
+    <pre>  Archana           (2021sp93081)</pre>
+    <pre>  Poornima B J      (2021sp93040)</pre>
+    
+   </div>
+
+
+  </div>
+
+<center><fieldset>
+ <form action="" method="POST" autocomplete="off">
+{% csrf_token %}
+Enter your name:<br><br>
+<input type="text" name="name" size="35" required><br><br>
+        
+Enter review:<br><br>
+<textarea rows = "3" cols = "35" name = "review"  required="required"></textarea><br><br>
+<div class="btn"><input type="submit" value=" Submit " name="submit"></div>
+     
+     
+</form>
+</fieldset></center>
+
+
+
+{% if h %}
+
+  {% if op %}
+      <div class="positive">
+  {% else %}
+          <div class="negative">
+  {% endif %}
+      <table>
+          <tr>
+             {% if  op %}
+              <td rowspan="2"><div class="emo">😄</div></td>
+              <td><div class ="pn"> POSITIVE!!</div></td>
+              {% else %}
+              <td rowspan="2"><div class="emo">🙁</div></td>
+              <td><div class ="pn">NEGATIVE!!</div></td>
+              {% endif %}
+          </tr>
+          
+          <tr>
+              <td>
+                  <div class="uname">
+                      {{name}}<br>
+                  </div>
+                  {{review}}
+              </td>
+             
+          </tr>
+          
+
+      </table>
+  </div>
+{% endif %}
+
+<br>
+<br>
+<center><div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'All')">All</button>
+  <button class="tablinks" onclick="openTab(event, 'Positive')">Positive</button>
+  <button class="tablinks" onclick="openTab(event, 'Negative')">Negative</button>
+</div></center>
+
+<div id="All" class="tabcontent">
+{% if AllObFlag %}
+  {% for i in AllOb %}
+  {% if i.sentiment  %}
+          <div class="positive">
+  {% else %}
+          <div class="negative">
+  {% endif %}
+  <table>
+      <tr>
+         {% if  i.sentiment  %}
+          <td><div class="emo">😄</div></td>           
+          {% else %}
+          <td><div class="emo">🙁</div></td>            
+          {% endif %}
+      
+          <td>
+              <div class="uname">
+                  {{i.name}}<br>
+              </div>
+              {{i.text}}
+          </td>
+         
+      </tr>
+      
+
+  </table>
+  
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+
+
+<!-- id positive -->
+<div id="Positive" class="tabcontent" >
+  {% if PositiveObFlag %}
+  {% for i in PositiveOb %}
+  
+  <div class="positive">
+  <table>
+      <tr>           
+          <td><div class="emo">😄</div></td>         
+          <td>
+              <div class="uname">
+                  {{i.name}}<br>
+              </div>
+              {{i.text}}
+          </td>           
+      </tr>       
+
+  </table>
+  </div>   
+ 
+  
+  {% endfor %}
+  {% endif %}
+
+</div>
+  
+
+<div id="Negative" class="tabcontent">
+  {% if NegativeObFlag %}
+   
+    {% for i in NegativeOb %}
+    <div class = "negative">
+
+   
+    <table>
+        <tr>           
+            <td><div class="emo">🙁</div></td>         
+            <td>
+                <div class="uname">
+                    {{i.name}}<br>
+                </div>
+                {{i.text}}
+            </td>           
+        </tr>
+        
+
+    </table>
+    </div>
+    {% endfor %}
+  {% endif %}
+ 
+  
+  
+</div>
+
+<script>
+  if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+}
+  function openTab(evt, tab_name) {
+    var i, tabcontent, tablinks;
+    closeNav()
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tab_name).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "450px";
+  }
+  
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+  }
+  </script>
+</body>
+</html>   
